@@ -18,9 +18,11 @@ def search(search):
                 status
                 media {
                     title { romaji }
+                    episodes
+                    duration
+                    averageScore
                     format
                     id
-                    averageScore
               }
             }
           }
