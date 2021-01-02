@@ -3,7 +3,7 @@ import os
 
 
 def parseFunc():
-    with open("planning.json") as json_data:
+    with open("output.json") as json_data:
         data = json.load(json_data)
 
     parsed = data["data"]["MediaListCollection"]["lists"][0]["entries"]
@@ -20,4 +20,4 @@ def parseFunc():
     with open("parsed.json", "w") as out_file:
         out_file.write(objects)
 
-    os.remove("planning.json")
+    os.remove("output.json")
