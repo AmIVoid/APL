@@ -9,7 +9,7 @@ def parseFunc():
     for element in parsed: 
         del element['status']
 
-    objects = json.dumps(parsed)
+    objects = json.dumps(parsed, indent=4)
 
     with open('parsed.json', 'w') as out_file:
             out_file.write(objects)
