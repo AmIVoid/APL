@@ -1,6 +1,7 @@
 import requests
 import json
 from ratelimit import limits, sleep_and_retry
+from parseJSON import parseFunc
 
 RATE_LIMIT = 60
 CALLS = 60
@@ -22,6 +23,7 @@ def search(search):
                     duration
                     averageScore
                     format
+                    status
                     id
               }
             }
@@ -54,3 +56,5 @@ def getVars():
 
 if __name__ == '__main__':
     search(getVars())
+
+parseFunc()
