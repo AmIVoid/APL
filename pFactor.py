@@ -2,6 +2,7 @@ import json
 import requests
 from ratelimit import limits, sleep_and_retry
 import os
+import time
 
 RATE_LIMIT = 60
 CALLS = 90
@@ -147,3 +148,59 @@ def runRel():
         with open("all_rel.json", "w") as out_file:
             out_file.write(relOutput)
         os.remove("relations.json")
+    
+def idChecker():
+    
+    with open("relations_filtered.json") as rel_data:
+        relData = json.load(rel_data)
+        
+    with open("planning.json") as plan_data:
+        planData = json.load(plan_data)
+    
+    
+    r = 0
+    p = 0
+    
+    tr = len(relData)
+    
+    output = []
+    
+    
+    for x in range(len(relData) * len(planData)):        
+        if relData[r] == planData[p]["media"]["id"]:
+            print(relData[r], "is a match")
+            
+            planData[p]["media"]["pfactor"] = 1
+            
+            output.append(planData[p]["media"])
+            
+            r = 0
+            p +=1
+            
+        if r != tr:
+            
+            if relData[r] != planData[p]["media"]["id"]:
+            
+                print(relData[r], "against", planData[p]["media"]["id"])
+            
+                #print(len(relData))
+                #print(r)
+                
+                r +=1
+                
+        if r == tr:
+            
+            output.append(planData[p]["media"])
+            
+            r = 0
+            p += 1
+            
+        if p == len(planData):
+            
+            planOutput = json.dumps(output, indent=4)
+            
+            print(planOutput, file=open("p_planning.json", "w"))
+            
+            #file = open("p_planning.json", "w")
+            #file.write(planOutput)
+            break
