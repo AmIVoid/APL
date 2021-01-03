@@ -77,8 +77,6 @@ def planFilter():
     f = 0
 
     for x in range(len(planData)):
-        print(planData[f])
-        print(planData[f]["media"]["id"])
         output.append(planData[f]["media"]["id"])
         f +=1
 
@@ -96,8 +94,6 @@ def compFilter():
     f = 0
 
     for x in range(len(compData)):
-        print(compData[f])
-        print(compData[f]["media"]["id"])
         output.append(compData[f]["media"]["id"])
         f +=1
 
@@ -120,7 +116,6 @@ def relFilter():
             aList +=1
         else:
             for x in range(len(relData[aList])):
-                print(relData[aList][i]["id"])
                 output.append(relData[aList][i]["id"])
                 i +=1
         
@@ -135,7 +130,7 @@ def relFilter():
 
 
 def runRel():
-    with open("planning_filtered.json") as json_data:
+    with open("completed_filtered.json") as json_data:
         data = json.load(json_data)
     
     i = 0
@@ -146,11 +141,9 @@ def runRel():
         parseRel()
         with open("relations.json") as relData:
             output.append(json.load(relData))
-        #print("AniList ID:", data[i])
-        print("Array index:", i)
         i +=1
+        print(round(i / len(data) * 100, 1), "% Complete")
         relOutput = json.dumps(output, indent=4)
         with open("all_rel.json", "w") as out_file:
             out_file.write(relOutput)
         os.remove("relations.json")
-    
