@@ -4,7 +4,7 @@ from ratelimit import limits, sleep_and_retry
 import os
 
 RATE_LIMIT = 60
-CALLS = 60
+CALLS = 90
 
 
 @sleep_and_retry
@@ -22,6 +22,7 @@ def relations(listId):
                 id
                 type
                 format
+                status
                 title {
                     romaji
                 }
@@ -49,13 +50,17 @@ def parseRel():
     parsed = data["data"]["Media"]["relations"]["nodes"]
 
     parse_type = [x for x in parsed if x["type"] == "ANIME"]
+    
+    parse_format = [x for x in parse_type if x["format"] == "TV"]
+    
+    parse_status = [x for x in parse_format if x["status"] == "FINISHED"]
 
     i = 0
 
     while i <= len(parse_type):
         i += 1
 
-    objects = json.dumps(parse_type, indent=4)
+    objects = json.dumps(parse_status, indent=4)
 
     with open("relations.json", "w") as out_file:
         out_file.write(objects)
@@ -81,6 +86,53 @@ def planFilter():
 
     with open("planning_filtered.json", "w") as out_file:
         out_file.write(planObjects)
+        
+def compFilter():
+    with open("completed.json") as jsonData:
+        compData = json.load(jsonData)
+
+    output = []
+
+    f = 0
+
+    for x in range(len(compData)):
+        print(compData[f])
+        print(compData[f]["media"]["id"])
+        output.append(compData[f]["media"]["id"])
+        f +=1
+
+    compObjects = json.dumps(output, indent=4)
+
+    with open("completed_filtered.json", "w") as out_file:
+        out_file.write(compObjects)
+        
+def relFilter():
+    with open("all_rel.json") as jsonData:
+        relData = json.load(jsonData)
+
+    output = []
+
+    aList = 0
+    i = 0
+    
+    for x in range(len(relData)):
+        if relData[aList] == "[]":
+            aList +=1
+        else:
+            for x in range(len(relData[aList])):
+                print(relData[aList][i]["id"])
+                output.append(relData[aList][i]["id"])
+                i +=1
+        
+        aList += 1
+        i = 0
+        
+        
+    relObjects = json.dumps(output, indent=4)
+        
+    with open("relations_filtered.json", "w") as out_file:
+        out_file.write(relObjects)
+
 
 def runRel():
     with open("planning_filtered.json") as json_data:
@@ -95,8 +147,10 @@ def runRel():
         with open("relations.json") as relData:
             output.append(json.load(relData))
         #print("AniList ID:", data[i])
-        #print("Array index:", i)
+        print("Array index:", i)
         i +=1
         relOutput = json.dumps(output, indent=4)
         with open("all_rel.json", "w") as out_file:
             out_file.write(relOutput)
+        os.remove("relations.json")
+    
