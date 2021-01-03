@@ -170,7 +170,7 @@ def idChecker():
         if relData[r] == planData[p]["media"]["id"]:
             print(relData[r], "is a match")
             
-            planData[p]["media"]["pfactor"] = 1
+            planData[p]["media"]["pfactor"] = 0.1
             
             output.append(planData[p]["media"])
             
@@ -190,6 +190,8 @@ def idChecker():
                 
         if r == tr:
             
+            planData[p]["media"]["pfactor"] = 0
+            
             output.append(planData[p]["media"])
             
             r = 0
@@ -204,3 +206,5 @@ def idChecker():
             #file = open("p_planning.json", "w")
             #file.write(planOutput)
             break
+
+idChecker()
