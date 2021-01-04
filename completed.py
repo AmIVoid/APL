@@ -41,19 +41,14 @@ def completed_search(completed_search):
 
     with open("output.json", "w") as out_file:
         out_file.write(text_out)
+        
+        
+def compParse():
+    
+    parseFunc()
 
-
-def getVars():
-    return input("Anilist username: ")
-
-
-if __name__ == "__main__":
-    completed_search(getVars())
-
-parseFunc()
-
-if os.path.isfile("completed.json"):
-    os.remove("completed.json")
-    os.rename("parsed.json", "completed.json")
-else:
-    os.rename("parsed.json", "completed.json")
+    if os.path.isfile("completed.json"):
+        os.remove("completed.json")
+        os.rename("parsed.json", "completed.json")
+    else:
+        os.rename("parsed.json", "completed.json")

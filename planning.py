@@ -44,19 +44,13 @@ def search(search):
 
     with open("output.json", "w") as out_file:
         out_file.write(text_out)
-
-
-def getVars():
-    return input("Anilist username: ")
-
-
-if __name__ == "__main__":
-    search(getVars())
-
-parseFunc()
-
-if os.path.isfile("planning.json"):
-    os.remove("planning.json")
-    os.rename("parsed.json", "planning.json")
-else:
-    os.rename("parsed.json", "planning.json")
+        
+def searchParse():
+            
+    parseFunc()
+    
+    if os.path.isfile("planning.json"):
+        os.remove("planning.json")
+        os.rename("parsed.json", "planning.json")
+    else:
+        os.rename("parsed.json", "planning.json")
