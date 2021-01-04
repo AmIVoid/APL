@@ -53,7 +53,7 @@ if __name__ == "__main__":
 parseFunc()
 
 if os.path.isfile("completed.json"):
-	os.remove("completed.json")
-	os.rename("parsed.json","completed.json")
+    os.remove("completed.json")
+    os.rename("parsed.json", "completed.json")
 else:
-	os.rename("parsed.json","completed.json")
+    os.rename("parsed.json", "completed.json")
