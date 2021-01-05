@@ -9,7 +9,7 @@ CALLS = 85
 
 @sleep_and_retry
 @limits(calls=CALLS, period=RATE_LIMIT)
-def relations(listId):
+def getRelationsData(listId):
     url = "https://graphql.anilist.co"
     query = """
 	query($id: Int) {
@@ -40,79 +40,43 @@ def relations(listId):
     if response.status_code != 200:
         raise Exception("API response: {}".format(response.status_code))
 
-    text_out = response.text
-
-    with open("rel.json", "w") as out_file:
-        out_file.write(text_out)
+    return json.loads(response.text)
 
 
-def parseRelations():
-    with open("rel.json") as json_data:
-        data = json.load(json_data)
-
-    parsed = data["data"]["Media"]["relations"]["nodes"]
+def parseRelations(relation_data):
+    # print(relation_data["data"])
+    parsed = relation_data["data"]["Media"]["relations"]["nodes"]
 
     parse_type = [x for x in parsed if x["type"] == "ANIME"]
     parse_format = [x for x in parse_type if x["format"] == "TV"]
     parse_status = [x for x in parse_format if x["status"] == "FINISHED"]
 
-    objects = json.dumps(parse_status, indent=4)
-
-    with open("relations.json", "w") as out_file:
-        out_file.write(objects)
-
-    os.remove("rel.json")
+    return parse_status
 
 
-def relFilter():
+def relFilter(relations_list):
+    return [x["id"] for j in relations_list if j != [] for x in j]
+
+
+def runRel(completed_data):
+    relations = []
+
+    for x in range(len(completed_data)):
+        relation_data = getRelationsData(completed_data[x])
+        relations.append(parseRelations(relation_data))
+        print(round((x + 1) / len(completed_data) * 100, 1), "% Complete")
+
+    return relations
+
+
+def idChecker(planning_data, relations_id):
     output = []
 
-    with open("all_rel.json") as jsonData:
-        relData = json.load(jsonData)
-
-    output = [x["id"] for j in relData if j != [] for x in j]
-
-    relObjects = json.dumps(output, indent=4)
-
-    with open("relations_filtered.json", "w") as out_file:
-        out_file.write(relObjects)
-
-
-def runRel():
-    with open("completed_filtered.json") as json_data:
-        data = json.load(json_data)
-
-    i = 0
-    output = []
-
-    for x in range(len(data)):
-        relations(data[i])
-        parseRelations()
-        with open("relations.json") as relData:
-            output.append(json.load(relData))
-        i += 1
-        print(round(i / len(data) * 100, 1), "% Complete")
-        relOutput = json.dumps(output, indent=4)
-        with open("all_rel.json", "w") as out_file:
-            out_file.write(relOutput)
-        os.remove("relations.json")
-
-
-def idChecker():
-
-    with open("relations_filtered.json") as rel_data:
-        relData = json.load(rel_data)
-
-    with open("planning.json") as plan_data:
-        planData = json.load(plan_data)
-
-    output = []
-
-    for i in range(len(planData)):
-        planData[i]["media"]["pfactor"] = compareRelaltivePlan(
-            relData, planData[i]["media"]["id"]
+    for i in range(len(planning_data)):
+        planning_data[i]["media"]["pfactor"] = compareRelaltivePlan(
+            relations_id, planning_data[i]["media"]["id"]
         )
-        output.append(planData[i]["media"])
+        output.append(planning_data[i]["media"])
 
     planOutput = json.dumps(output, indent=4)
     print(planOutput, file=open("p_planning.json", "w"))
@@ -127,16 +91,10 @@ def compareRelaltivePlan(relativeData, plan_id):
     return 0
 
 
-def filterList(name):
+def filterList(data):
     output = []
-
-    with open("{}.json".format(name)) as jsonData:
-        data = json.load(jsonData)
 
     for x in range(len(data)):
         output.append(data[x]["media"]["id"])
 
-    objects = json.dumps(output, indent=4)
-
-    with open("{}_filtered.json".format(name), "w") as out_file:
-        out_file.write(objects)
+    return output

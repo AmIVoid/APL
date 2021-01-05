@@ -1,5 +1,6 @@
 import requests
 import os
+import json
 from ratelimit import limits, sleep_and_retry
 from parseJSON import parseFunc
 
@@ -36,19 +37,6 @@ def completed_search(completed_search):
     url = "https://graphql.anilist.co"
 
     response = requests.post(url, json={"query": query, "variables": variables})
+    parsed_response = parseFunc(response.text)
 
-    text_out = response.text
-
-    with open("output.json", "w") as out_file:
-        out_file.write(text_out)
-        
-        
-def compParse():
-    
-    parseFunc()
-
-    if os.path.isfile("completed.json"):
-        os.remove("completed.json")
-        os.rename("parsed.json", "completed.json")
-    else:
-        os.rename("parsed.json", "completed.json")
+    return parsed_response

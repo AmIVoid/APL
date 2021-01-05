@@ -1,5 +1,6 @@
 import requests
 import os
+import json
 from ratelimit import limits, sleep_and_retry
 from parseJSON import parseFunc
 
@@ -40,17 +41,6 @@ def search(search):
 
     response = requests.post(url, json={"query": query, "variables": variables})
 
-    text_out = response.text
+    parsed_response = parseFunc(response.text)
 
-    with open("output.json", "w") as out_file:
-        out_file.write(text_out)
-        
-def searchParse():
-            
-    parseFunc()
-    
-    if os.path.isfile("planning.json"):
-        os.remove("planning.json")
-        os.rename("parsed.json", "planning.json")
-    else:
-        os.rename("parsed.json", "planning.json")
+    return parsed_response
