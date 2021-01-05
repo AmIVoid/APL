@@ -137,15 +137,6 @@ class Window(QMainWindow):
         msgBox.setText("Updated spreadsheet data.")
         msgBox.setWindowTitle("APL Alert")
         msgBox.setStandardButtons(QMessageBox.Ok)
-        
-        
-        if os.path.exists('userdata.json'):
-            with open('userdata.json') as f:
-                data = json.load(f)
-            
-            user = data["Anilist"]
-            sheetId = data["Spreadsheet"]
-            sheetName = data["Sheet"]
 
         QApplication.processEvents()
         time.sleep(0.5)
