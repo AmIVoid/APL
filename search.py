@@ -10,7 +10,7 @@ CALLS = 60
 
 @sleep_and_retry
 @limits(calls=CALLS, period=RATE_LIMIT)
-def search(search):
+def planningSearch(search):
     query = """
 	query($username: String, $type: MediaType, $status: MediaListStatus) {
     MediaListCollection(userName: $username, type: $type, status: $status) {
@@ -36,11 +36,43 @@ def search(search):
 	"""
 
     variables = {"username": search, "type": "ANIME", "status": "PLANNING"}
+    url = "https://graphql.anilist.co"
+
+    response = requests.post(url, json={"query": query, "variables": variables})
+    parsed_response = parseFunc(response.text)
+
+    return parsed_response
+
+
+@sleep_and_retry
+@limits(calls=CALLS, period=RATE_LIMIT)
+def completedSearch(completed_search):
+    query = """
+	query($username: String, $type: MediaType, $status: MediaListStatus) {
+    MediaListCollection(userName: $username, type: $type, status: $status) {
+        lists {
+            name
+            entries {
+                status
+                media {
+                    title {
+                        romaji
+                    }
+                    format
+                    status
+                    id
+                }
+            }
+        }
+    }
+}
+	"""
+
+    variables = {"username": completed_search, "type": "ANIME", "status": "COMPLETED"}
 
     url = "https://graphql.anilist.co"
 
     response = requests.post(url, json={"query": query, "variables": variables})
-
     parsed_response = parseFunc(response.text)
 
     return parsed_response
