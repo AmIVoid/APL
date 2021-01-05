@@ -6,7 +6,6 @@ from sheets import sheets
 def APL():
 
     user = input("AniList username: ")
-
     sheetId = input("Google Sheets ID: ")
 
     planning_data = planningSearch(user)

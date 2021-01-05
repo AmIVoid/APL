@@ -2,7 +2,6 @@ import requests
 import os
 import json
 from ratelimit import limits, sleep_and_retry
-from parseJSON import parseFunc
 
 RATE_LIMIT = 60
 CALLS = 60
@@ -76,3 +75,17 @@ def completedSearch(completed_search):
     parsed_response = parseFunc(response.text)
 
     return parsed_response
+
+
+def parseFunc(data):
+    objects = json.loads(data)
+    parsed = objects["data"]["MediaListCollection"]["lists"][0]["entries"]
+
+    for element in parsed:
+        del element["status"]
+
+    parse_format = [x for x in parsed if x["media"]["format"] == "TV"]
+
+    parse_status = [x for x in parse_format if x["media"]["status"] == "FINISHED"]
+
+    return parse_status

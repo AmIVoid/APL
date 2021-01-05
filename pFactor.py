@@ -44,7 +44,6 @@ def getRelationsData(listId):
 
 
 def parseRelations(relation_data):
-    # print(relation_data["data"])
     parsed = relation_data["data"]["Media"]["relations"]["nodes"]
 
     parse_type = [x for x in parsed if x["type"] == "ANIME"]
