@@ -1,15 +1,14 @@
 from pygsheetsorm import Repository, Model
 import json
 
-service_account_file = "./my-creds.json"
+service_account_file = "credentials.json"
 
-
-def updateSheets(sheetsId, p_factor_data):
+def updateSheets(sheetsId, sheetName, p_factor_data):
 
     repo = Repository.get_repository_with_creds(
         service_account_file=service_account_file,
         spreadsheet_id=sheetsId,
-        sheet_name="Raw Data",
+        sheet_name=sheetName,
     )
 
     list = repo.get_all()
