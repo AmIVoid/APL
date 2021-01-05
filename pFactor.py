@@ -2,10 +2,9 @@ import json
 import requests
 from ratelimit import limits, sleep_and_retry
 import os
-import time
 
 RATE_LIMIT = 60
-CALLS = 90
+CALLS = 85
 
 
 @sleep_and_retry
@@ -56,11 +55,6 @@ def parseRel():
     parse_format = [x for x in parse_type if x["format"] == "TV"]
 
     parse_status = [x for x in parse_format if x["status"] == "FINISHED"]
-
-    i = 0
-
-    while i <= len(parse_type):
-        i += 1
 
     objects = json.dumps(parse_status, indent=4)
 
