@@ -1,11 +1,14 @@
 from planning import search, searchParse
 from completed import completed_search, compParse
 from pFactor import runRel, idChecker, relFilter, filterList
+from sheets import sheets
 
 
 def APL():
 
     user = input("AniList username: ")
+    
+    sheetId = input("Google Sheets ID: ")
 
     search(user)
     searchParse()
@@ -16,6 +19,6 @@ def APL():
     runRel()
     relFilter()
     idChecker()
-
+    sheets(sheetId)
 
 APL()
