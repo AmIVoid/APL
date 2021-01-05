@@ -12,6 +12,3 @@ def APL():
     p_factor_data = getPFactorData(user)
 
     updateSheets(sheetId, p_factor_data)
-
-
-APL()
