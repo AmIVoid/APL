@@ -1,8 +1,7 @@
 import json
 
 from pFactor import getPFactorData
-
-from sheets import sheets
+from sheets import updateSheets
 
 
 def APL():
