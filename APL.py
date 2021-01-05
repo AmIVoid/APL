@@ -7,15 +7,12 @@ def APL():
 
     user = input("AniList username: ")
 
-    search(user)
-    searchParse()
-    completed_search(user)
-    compParse()
-    filterList("planning")
-    filterList("completed")
-    runRel()
-    relFilter()
-    idChecker()
+    planning_data = search(user)
+    completed_data = completed_search(user)
+    completed_filtered = filterList(completed_data)
+    relations_list = runRel(completed_filtered)
+    relation_ids = relFilter(relations_list)
+    idChecker(planning_data, relation_ids)
 
 
 APL()
