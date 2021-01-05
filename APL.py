@@ -1,5 +1,5 @@
-from planning import search, searchParse
-from completed import completed_search, compParse
+from planning import search
+from completed import completed_search
 from pFactor import runRel, idChecker, relFilter, filterList
 from sheets import sheets
 
