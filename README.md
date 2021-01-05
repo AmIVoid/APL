@@ -65,6 +65,7 @@ Your spreadsheet ID can be found in the URL of your spreadsheet e.g. (https://do
 The sheet name you will want to use is `Raw Data` if you've copied the example spreadsheet.
 
 With that everything is ready to be run, if you wish to save your data (AniList name, Spreadsheet ID and Sheet Name) the `Save data` button will keep that data in a local file to be used the next time you open APL.
+### Note: Inputting the data to the google sheet can take a while, the program will create an alert box to tell you when it is done. When the program doesnt respond it doesn't mean it's crashed.
 
 ***
 
