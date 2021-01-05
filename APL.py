@@ -2,7 +2,7 @@ import json
 
 from pFactor import getPFactorData
 
-# from sheets import sheets
+from sheets import sheets
 
 
 def APL():
@@ -12,11 +12,7 @@ def APL():
 
     p_factor_data = getPFactorData(user)
 
-    planOutput = json.dumps(p_factor_data, indent=4)
-    with open("p_planning.json", "w") as out_file:
-        out_file.write(planOutput)
-
-    # sheets(sheetId)
+    updateSheets(sheetId, p_factor_data)
 
 
 APL()
