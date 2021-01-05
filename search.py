@@ -4,7 +4,43 @@ import json
 from ratelimit import limits, sleep_and_retry
 
 RATE_LIMIT = 60
-CALLS = 60
+CALLS = 85
+
+
+@sleep_and_retry
+@limits(calls=CALLS, period=RATE_LIMIT)
+def getRelationsData(listId):
+    url = "https://graphql.anilist.co"
+    query = """
+	query($id: Int) {
+    Media(id: $id, type: ANIME) {
+        id
+        title {
+            romaji
+        }
+        relations {
+            nodes {
+                id
+                type
+                format
+                status
+                title {
+                    romaji
+                }
+            }
+        }
+    }
+}
+	"""
+
+    variables = {"id": listId}
+
+    response = requests.post(url, json={"query": query, "variables": variables})
+
+    if response.status_code != 200:
+        raise Exception("API response: {}".format(response.status_code))
+
+    return json.loads(response.text)
 
 
 @sleep_and_retry
