@@ -106,48 +106,25 @@ def idChecker():
     with open("planning.json") as plan_data:
         planData = json.load(plan_data)
 
-    r = 0
-    p = 0
-
-    tr = len(relData)
-
     output = []
 
-    for x in range(len(relData) * len(planData)):
-        if relData[r] == planData[p]["media"]["id"]:
-            print(relData[r], "is a match")
+    for i in range(len(planData)):
+        planData[i]["media"]["pfactor"] = compareRelaltivePlan(
+            relData, planData[i]["media"]["id"]
+        )
+        output.append(planData[i]["media"])
 
-            planData[p]["media"]["pfactor"] = 0.1
+    planOutput = json.dumps(output, indent=4)
+    print(planOutput, file=open("p_planning.json", "w"))
 
-            output.append(planData[p]["media"])
 
-            r = 0
-            p += 1
+def compareRelaltivePlan(relativeData, plan_id):
+    for r in range(len(relativeData)):
+        if relativeData[r] == plan_id:
+            print(relativeData[r], "is a match")
+            return 0.1
 
-        if r != tr:
-
-            if relData[r] != planData[p]["media"]["id"]:
-
-                # print(relData[r], "against", planData[p]["media"]["id"])
-
-                r += 1
-
-        if r == tr:
-
-            planData[p]["media"]["pfactor"] = 0
-
-            output.append(planData[p]["media"])
-
-            r = 0
-            p += 1
-
-        if p == len(planData):
-
-            planOutput = json.dumps(output, indent=4)
-
-            print(planOutput, file=open("p_planning.json", "w"))
-
-            break
+    return 0
 
 
 def filterList(name):
