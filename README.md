@@ -13,7 +13,7 @@ As I have over 250+ anime planning to watch I usually can't decide what to watch
 
 # Installing
 
-As of now there are 2 ways to install APL, by git and by an installer. I plan to add APL to the AUR in the furture.
+As of now there are 2 ways to install APL, by git and by an installer. I plan to add APL to the AUR in the future.
 
 ## Releases
 Download the [APL Installer](https://github.com/AmIVoid/APL/releases/download/1.2/APLSetup.exe) here or at the releases page.
