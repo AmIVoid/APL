@@ -18,10 +18,12 @@ def updateSheets(sheetsId, sheetName, p_factor_data):
         animeName = list[i]
 
         animeName.alt_name = p_factor_data[i]["title"]["romaji"]
+        animeName.apl_score = p_factor_data[i]["APL"]
         animeName.episodes = p_factor_data[i]["episodes"]
         animeName.episode_time = p_factor_data[i]["duration"]
         animeName.mean_score = p_factor_data[i]["averageScore"]
         animeName.anilist_id = p_factor_data[i]["id"]
+        animeName.b_factor = p_factor_data[i]["bfactor"]
         animeName.p_factor = p_factor_data[i]["pfactor"]
 
         animeName.Save()
