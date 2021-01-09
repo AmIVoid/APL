@@ -16,7 +16,7 @@ As I have over 250+ anime planning to watch I usually can't decide what to watch
 As of now there are 2 ways to install APL, by git and by an installer. I plan to add APL to the AUR in the furture.
 
 ## Releases
-Download the [APL Installer](https://github.com/AmIVoid/APL/releases/download/1.1/APLSetup.exe) here or at the releases page.
+Download the [APL Installer](https://github.com/AmIVoid/APL/releases/download/1.2/APLSetup.exe) here or at the releases page.
 
 ## Git
 `git clone https://github.com/AmIVoid/APL.git` `pip install -r requirements.txt`
