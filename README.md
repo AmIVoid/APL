@@ -13,7 +13,10 @@ As I have over 250+ anime planning to watch I usually can't decide what to watch
 
 # Installing
 
-Currently the only way to install APL is by git, I plan to create a downloaded exe for Windows and possible add APL to the AUR for Arch users.
+As of now there are 2 ways to install APL, by git and by an installer. I plan to add APL to the AUR in the furture.
+
+## Releases
+Download the [APL Installer](https://github.com/AmIVoid/APL/releases/download/1.1/APLSetup.exe) here or at the releases page.
 
 ## Git
 `git clone https://github.com/AmIVoid/APL.git` `pip install -r requirements.txt`
@@ -57,7 +60,7 @@ One last step is to copy the service account email and add it as an editor to yo
 ![Editor](https://puu.sh/H40uG.png)
 
 ## Running APL
-Running GUI.py will show you 3 input boxes and 3 button as well as an indicator to show if credentials.json is present in the folder. Fill out the boxes with your details like so.
+Running APL will show you 3 input boxes and 3 button as well as an indicator to show if credentials.json is present in the folder. Fill out the boxes with your details like so.
 
 ![GUI](https://puu.sh/H40xH.png)
 
