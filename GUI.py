@@ -6,12 +6,27 @@ import sys
 import time
 import os
 import json
-from pFactor import getPFactorData, getRelations
+from pFactor import getPFactorData
 from sheets import updateSheets
 
+
+class Worker(QRunnable):
+    '''
+    Worker thread
+    '''
+
+    @pyqtSlot()
+    def run(self):
+        '''
+        Your code goes in this function
+        '''
+        print("Thread start")
+        time.sleep(1)
+        print("Thread complete")
 class Window(QMainWindow): 
     def __init__(self): 
         super().__init__() 
+        self.threadpool = QThreadPool()
 
         title = "Anime Priority List"
         self.setWindowTitle(title) 
@@ -106,6 +121,9 @@ class Window(QMainWindow):
             with open('userdata.json') as f:
                 data = json.load(f)
             
+            worker = Worker()
+            self.threadpool.start(worker)
+            
             anilist = data["Anilist"]
             spreadsheet = data["Spreadsheet"]
             sheet = data["Sheet"]
@@ -117,16 +135,20 @@ class Window(QMainWindow):
         self.show()
         
         while not os.path.exists('credentials.json'):
-            QApplication.processEvents()
-            time.sleep(0.01)
+            worker = Worker()
+            self.threadpool.start(worker)
         
         if os.path.exists('credentials.json'):
-            QApplication.processEvents()
+            worker = Worker()
+            self.threadpool.start(worker)
             self.label5.setStyleSheet("color: green;")
             self.label5.setText("Found")
             self.label5.move(100, 160)
         
     def APLGui(self):
+
+        worker = Worker()
+        self.threadpool.start(worker)
 
         user = self.textbox1.text()
         sheetId = self.textbox2.text()
@@ -138,19 +160,22 @@ class Window(QMainWindow):
         msgBox.setWindowTitle("APL Alert")
         msgBox.setStandardButtons(QMessageBox.Ok)
 
-        QApplication.processEvents()
-        time.sleep(0.5)
+        worker = Worker()
+        self.threadpool.start(worker)
         
         p_factor_data = getPFactorData(user)
         
-        QApplication.processEvents()
-        time.sleep(0.5)
+        worker = Worker()
+        self.threadpool.start(worker)
 
         updateSheets(sheetId, sheetName, p_factor_data)
         
         msgBox.exec()
         
     def saveCreds(self):
+        
+        worker = Worker()
+        self.threadpool.start(worker)
         
         pre = {"Anilist": self.textbox1.text(), "Spreadsheet": self.textbox2.text(), "Sheet": self.textbox3.text()}
         jsonData = json.dumps(pre)
@@ -159,6 +184,10 @@ class Window(QMainWindow):
            userdata.write(jsonData)
            
     def clearCreds(self):
+        
+        worker = Worker()
+        self.threadpool.start(worker)
+        
         if os.path.exists("userdata.json"):
             os.remove("userdata.json")
             self.textbox1.setText("")
