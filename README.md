@@ -24,7 +24,7 @@ Download the [APL Installer](https://github.com/AmIVoid/APL/releases/download/1.
 ***
 
 # Video Tutorial
-I will be making a video tutorial on how to setup APL for google sheets.
+[Video Tutorial](https://youtu.be/BWv0Y20jnDA)
 
 # Written tutorial
 Before starting APL you will need to have a few things for Google sheets to work.
