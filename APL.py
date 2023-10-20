@@ -7,8 +7,8 @@ from sheets import updateSheets
 def APL():
 
     user = input("AniList username: ")
-    sheetId = input("Google Sheets ID: ")
+    # sheetId = input("Google Sheets ID: ")
 
     p_factor_data = getPFactorData(user)
 
-    updateSheets(sheetId, p_factor_data)
+    updateSheets(p_factor_data)

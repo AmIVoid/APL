@@ -1,29 +1,15 @@
-from pygsheetsorm import Repository, Model
+import csv
 import json
+import pandas
 
-service_account_file = "credentials.json"
 
-def updateSheets(sheetsId, sheetName, p_factor_data):
-
-    repo = Repository.get_repository_with_creds(
-        service_account_file=service_account_file,
-        spreadsheet_id=sheetsId,
-        sheet_name=sheetName,
-    )
-
-    list = repo.get_all()
-
-    for i in range(len(p_factor_data)):
-
-        animeName = list[i]
-
-        animeName.alt_name = p_factor_data[i]["title"]["romaji"]
-        animeName.apl_score = p_factor_data[i]["APL"]
-        animeName.episodes = p_factor_data[i]["episodes"]
-        animeName.episode_time = p_factor_data[i]["duration"]
-        animeName.mean_score = p_factor_data[i]["averageScore"]
-        animeName.anilist_id = p_factor_data[i]["id"]
-        animeName.b_factor = p_factor_data[i]["bfactor"]
-        animeName.p_factor = p_factor_data[i]["pfactor"]
-
-        animeName.Save()
+def updateSheets(p_factor_data):
+    with open('data.csv', 'w', newline='', encoding='utf-8') as data_file:
+        csv_writer = csv.writer(data_file)
+        count = 0
+        for i in p_factor_data:
+            if count == 0:
+                header = i.keys()
+                csv_writer.writerow(header)
+                count += 1
+            csv_writer.writerow(i.values())

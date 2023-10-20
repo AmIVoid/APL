@@ -35,7 +35,8 @@ def getRelationsData(listId):
 
     variables = {"id": listId}
 
-    response = requests.post(url, json={"query": query, "variables": variables})
+    response = requests.post(
+        url, json={"query": query, "variables": variables})
 
     if response.status_code != 200:
         raise Exception("API response: {}".format(response.status_code))
@@ -73,7 +74,8 @@ def planningSearch(search):
     variables = {"username": search, "type": "ANIME", "status": "PLANNING"}
     url = "https://graphql.anilist.co"
 
-    response = requests.post(url, json={"query": query, "variables": variables})
+    response = requests.post(
+        url, json={"query": query, "variables": variables})
     parsed_response = parseFunc(response.text)
 
     return parsed_response
@@ -103,11 +105,13 @@ def completedSearch(completed_search):
 }
 	"""
 
-    variables = {"username": completed_search, "type": "ANIME", "status": "COMPLETED"}
+    variables = {"username": completed_search,
+                 "type": "ANIME", "status": "COMPLETED"}
 
     url = "https://graphql.anilist.co"
 
-    response = requests.post(url, json={"query": query, "variables": variables})
+    response = requests.post(
+        url, json={"query": query, "variables": variables})
     parsed_response = parseFunc(response.text)
 
     return parsed_response
@@ -122,6 +126,7 @@ def parseFunc(data):
 
     parse_format = [x for x in parsed if x["media"]["format"] == "TV"]
 
-    parse_status = [x for x in parse_format if x["media"]["status"] == "FINISHED"]
+    parse_status = [x for x in parse_format if x["media"]
+                    ["status"] == "FINISHED"]
 
     return parse_status
