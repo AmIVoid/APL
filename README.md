@@ -4,7 +4,7 @@
 ### To-do
 - [] Get google sheets or some other spreasheet to work again
 - [] Get date with all lists
-- [] Pre sort by APL score
+- [x] Pre sort by APL score
 - [] Add relation data for series order
 - [] Add series order
 ```
