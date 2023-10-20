@@ -10,6 +10,25 @@ from pFactor import getPFactorData
 from sheets import updateSheets
 
 
+class WorkerSignals(QObject):
+    finished = pyqtSignal()
+    result = pyqtSignal(object)
+
+
+class Worker(QRunnable):
+    def __init__(self, func, *args, **kwargs):
+        super(Worker, self).__init__()
+        self.func = func
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = WorkerSignals()
+
+    def run(self):
+        result = self.func(*self.args, **self.kwargs)
+        self.signals.result.emit(result)
+        self.signals.finished.emit()
+
+
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -39,31 +58,36 @@ class Window(QMainWindow):
         self.textbox1.move(20, 20)
         self.textbox1.resize(280, 25)
 
-        # start button
+        # add button
 
-        self.button1 = QPushButton('Start', self)
-        self.button1.move(20, 200)
-        self.button1.setGeometry(20, 200, 280, 30)
+        self.button1 = QPushButton(self)
+        self.button1.setText("Add")
+        self.button1.setFont(QFont('Overpass'))
+        self.button1.move(100, 250)
 
-        self.button1.clicked.connect(self.APLGui)
+        self.button1.clicked.connect(self.addAnime)
 
-        self.show()
+    def addAnime(self):
+        worker = Worker(self.doAddAnime)
+        worker.signals.result.connect(self.handleResult)
+        self.threadpool.start(worker)
 
-    def APLGui(self):
-
+    def doAddAnime(self):
         user = self.textbox1.text()
+
+        p_factor_data = getPFactorData(user)
+
+        updateSheets(p_factor_data)
 
         msgBox = QMessageBox()
         msgBox.setWindowIcon(QtGui.QIcon('icon.ico'))
         msgBox.setText("Updated spreadsheet data.")
         msgBox.setWindowTitle("APL Alert")
         msgBox.setStandardButtons(QMessageBox.Ok)
-
-        p_factor_data = getPFactorData(user)
-
-        updateSheets(p_factor_data)
-
         msgBox.exec()
+
+    def handleResult(self, result):
+        print(result)
 
 
 App = QApplication(sys.argv)
