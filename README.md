@@ -1,7 +1,7 @@
 # WIP #
 
 ```[tasklist]
-__To-do__
+To-do
 - [] Get google sheets or some other spreasheet to work again
 - [] Get date with all lists
 - [x] Pre sort by APL score
