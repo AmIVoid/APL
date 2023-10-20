@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 from ratelimit import limits, sleep_and_retry
 
 RATE_LIMIT = 60
@@ -32,13 +33,22 @@ def getRelationsData(listId):
 }
 	"""
 
-    variables = {"id": listId}
-
+    variables = {
+        'id': listId
+    }
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
     response = requests.post(
-        url, json={"query": query, "variables": variables})
+        url, json={'query': query, 'variables': variables}, headers=headers)
 
-    if response.status_code != 200:
-        raise Exception("API response: {}".format(response.status_code))
+    if response.status_code == 429:
+        # retry after 5 seconds
+        time.sleep(5)
+        return getRelationsData(listId)
+
+    response.raise_for_status()
 
     return json.loads(response.text)
 
