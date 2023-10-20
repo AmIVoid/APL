@@ -1,47 +1,37 @@
-import sys
-from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5.QtCore import Qt, QObject, QRunnable, pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QMessageBox
+from PyQt5.QtGui import QFont, QCursor
 from pFactor import getPFactorData
 from sheets import updateSheets
 
 
 class WorkerSignals(QObject):
-    finished = pyqtSignal()
     result = pyqtSignal(object)
 
 
 class Worker(QRunnable):
-    def __init__(self, func, *args, **kwargs):
+    def __init__(self, fn):
         super(Worker, self).__init__()
-        self.func = func
-        self.args = args
-        self.kwargs = kwargs
+        self.fn = fn
         self.signals = WorkerSignals()
 
+    @pyqtSlot()
     def run(self):
-        result = self.func(*self.args, **self.kwargs)
+        result = self.fn()
         self.signals.result.emit(result)
-        self.signals.finished.emit()
 
 
-class Window(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.threadpool = QThreadPool()
 
-        title = "Anime Priority List"
-        self.setWindowTitle(title)
+        self.setWindowTitle("Anime Priority List v2")
         self.setWindowIcon(QtGui.QIcon('icon.ico'))
         self.setGeometry(810, 290, 300, 350)
         self.setFixedSize(320, 300)
-        self.UiComponents()
-        self.show()
 
-    def UiComponents(self):
-
-        # anilist user label
+        # title label
 
         self.label1 = QLabel(self)
         self.label1.setText("AniList User")
@@ -58,13 +48,15 @@ class Window(QMainWindow):
         # add button
 
         self.button1 = QPushButton(self)
-        self.button1.setText("Add")
+        self.button1.setText("Generate")
         self.button1.setFont(QFont('Overpass'))
         self.button1.move(100, 250)
 
         self.button1.clicked.connect(self.addAnime)
 
     def addAnime(self):
+        self.setCursor(QCursor(Qt.WaitCursor))
+        self.button1.setEnabled(False)
         worker = Worker(self.doAddAnime)
         worker.signals.result.connect(self.handleResult)
         self.threadpool.start(worker)
@@ -76,17 +68,21 @@ class Window(QMainWindow):
 
         updateSheets(p_factor_data)
 
-        msgBox = QMessageBox()
-        msgBox.setWindowIcon(QtGui.QIcon('icon.ico'))
-        msgBox.setText("Updated spreadsheet data.")
-        msgBox.setWindowTitle("APL Alert")
-        msgBox.setStandardButtons(QMessageBox.Ok)
-        msgBox.exec()
-
-    def handleResult(self, result):
-        print(result)
+    def handleResult(self):
+        self.setCursor(QCursor(Qt.ArrowCursor))
+        self.button1.setEnabled(True)
+        QMessageBox.information(
+            self, "APL Alert", "Anime data added successfully!")
 
 
-App = QApplication(sys.argv)
-window = Window()
-sys.exit(App.exec())
+if __name__ == '__main__':
+    import sys
+    from PyQt5.QtCore import QThreadPool
+
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+
+    window.threadpool = QThreadPool()
+
+    sys.exit(app.exec_())

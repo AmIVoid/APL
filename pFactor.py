@@ -45,9 +45,9 @@ def bFactor(planning_data, bEps, bScore):
             return 0
 
 
-def aplCalc(planning_data, aplScore, aplP, aplB):
+def aplCalc(planning_data, aplScore, aplP, aplB, bWeight=0.5, pWeight=0.5):
     for r in range(len(planning_data)):
-        return round(aplScore * (1 + (aplB + aplP)), 2)
+        return round(aplScore * (1 + (aplB * bWeight + aplP * pWeight)), 2)
 
 
 def filterList(data):
