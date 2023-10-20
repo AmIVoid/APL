@@ -1,12 +1,13 @@
 # WIP #
 
 ```[tasklist]
-### To-do
+__To-do__
 - [] Get google sheets or some other spreasheet to work again
 - [] Get date with all lists
 - [x] Pre sort by APL score
 - [] Add relation data for series order
 - [] Add series order
+- [] Better score weighting
 ```
 
 ***
