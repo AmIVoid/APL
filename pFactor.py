@@ -1,7 +1,3 @@
-import json
-import requests
-import os
-
 from search import getRelationsData, planningSearch, completedSearch
 
 
@@ -35,16 +31,18 @@ def compareRelaltivePlan(relativeData, plan_id):
         if relativeData[r] == plan_id:
             print(relativeData[r], "is a match")
             return 0.1
-        
+
     return 0
+
 
 def bFactor(planning_data, bEps, bScore):
     for r in range(len(planning_data)):
         if 12 < bEps < 50:
             if bScore > 75:
                 return (bScore - 75) * pow(10, -2)
-            
+
     return 0
+
 
 def aplCalc(planning_data, aplScore, aplP, aplB):
     for r in range(len(planning_data)):
@@ -75,11 +73,12 @@ def getPFactorData(user):
         )
         planning_data[i]["media"]["bfactor"] = bFactor(
             planning_data, planning_data[i]["media"]["episodes"], planning_data[i]["media"]["averageScore"]
-            )
+        )
         planning_data[i]["media"]["APL"] = aplCalc(
-            planning_data, planning_data[i]["media"]["averageScore"], planning_data[i]["media"]["pfactor"], planning_data[i]["media"]["bfactor"]
-            )
-        
+            planning_data, planning_data[i]["media"]["averageScore"], planning_data[
+                i]["media"]["pfactor"], planning_data[i]["media"]["bfactor"]
+        )
+
         output.append(planning_data[i]["media"])
 
     return output

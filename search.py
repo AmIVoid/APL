@@ -1,5 +1,4 @@
 import requests
-import os
 import json
 from ratelimit import limits, sleep_and_retry
 

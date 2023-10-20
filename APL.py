@@ -1,5 +1,3 @@
-import json
-
 from pFactor import getPFactorData
 from sheets import updateSheets
 
