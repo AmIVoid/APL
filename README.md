@@ -1,17 +1,3 @@
-# WIP #
-
-```[tasklist]
-To-do
-- [x] Get google sheets or some other spreasheet to work again
-- [] Get date with all lists
-- [x] Pre sort by APL score
-- [] Add relation data for series order
-- [] Add series order
-- [/] Better score weighting
-```
-
-***
-
 # APL - Anime Priority List
 
 ## What is APL?
@@ -25,9 +11,31 @@ As I have over 250+ anime planning to watch I usually can't decide what to watch
 
 ***
 
-## APL Score v1
-The APL Score is based on 3 factors:
-1. Mean Score (M) - Base score of Anime.
-2. B Factor (B) - Bingability of a series over 12 episodes long but less than 50 episodes long with a score over 75%. <img src="https://render.githubusercontent.com/render/math?math=B=(M-75)*10^-2">
-3. P Factor (P) - If the previous season has been watched.
-<img src="https://render.githubusercontent.com/render/math?math=APL%20Score%20=%20M%20\times%20(1%20%2B%20(B%20%2B%20P))">
+## APL Score v2
+- Score = Anime score
+- B = Bingability factor
+- P = Previous season watched
+- b & p Weights = 0.5
+
+<img src="https://i.upmath.me/svg/(Score%20-%2075)%20%5Ctimes%200.01%20%26%20%5Ctext%7B%20if%20%7D%2012%20%3C%20Eps%20%3C%2023%20%5C%5C(Score%20-%2075)%20%5Ctimes%200.01%20%2B%20%5Cfrac%7B1%20%2B%20%5Cmax(0.05%20%5Ctimes%20(Eps%20-%2024)%2C%200)%7D%7B100%7D%20%26%20%5Ctext%7B%20if%20%7D%20Eps%20%5Cgeq%2024%5C%5C%5Ctext%7Botherwise%20%7D0%0A" alt="(Score - 75) \times 0.01 &amp; \text{ if } 12 &lt; Eps &lt; 23 \\(Score - 75) \times 0.01 + \frac{1 + \max(0.05 \times (Eps - 24), 0)}{100} &amp; \text{ if } Eps \geq 24\\\text{otherwise }0
+" />
+
+<img src="https://i.upmath.me/svg/aplScore%20%5Ctimes%20%5Cleft(1%20%2B%20(B%20%5Ctimes%20bWeight%20%2B%20P%20%5Ctimes%20pWeight)%5Cright)" alt="aplScore \times \left(1 + (B \times bWeight + P \times pWeight)\right)" />
+
+
+***
+
+
+# WIP #
+
+```[tasklist]
+To-do
+- [x] Get google sheets or some other spreasheet to work again
+- [] Get date with all lists
+- [x] Pre sort by APL score
+- [] Add relation data for series order
+- [] Add series order
+- [/] Better score weighting
+- [] Update instructions
+- [] Discord bot
+```
