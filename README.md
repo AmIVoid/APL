@@ -2,12 +2,12 @@
 
 ```[tasklist]
 To-do
-- [] Get google sheets or some other spreasheet to work again
+- [x] Get google sheets or some other spreasheet to work again
 - [] Get date with all lists
 - [x] Pre sort by APL score
 - [] Add relation data for series order
 - [] Add series order
-- [] Better score weighting
+- [/] Better score weighting
 ```
 
 ***

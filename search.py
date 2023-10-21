@@ -133,7 +133,9 @@ def parseFunc(data):
     for element in parsed:
         del element["status"]
 
-    parse_format = [x for x in parsed if x["media"]["format"] == "TV"]
+    allowed_formats = ["TV", "TV_SHORT"]
+    parse_format = [x for x in parsed if x["media"]
+                    ["format"] in allowed_formats]
 
     parse_status = [x for x in parse_format if x["media"]
                     ["status"] == "FINISHED"]
