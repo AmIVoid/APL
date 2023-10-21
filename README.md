@@ -20,7 +20,7 @@ As I have over 250+ anime planning to watch I usually can't decide what to watch
 <img src="https://i.upmath.me/svg/(Score%20-%2075)%20%5Ctimes%200.01%20%26%20%5Ctext%7B%20if%20%7D%2012%20%3C%20Eps%20%3C%2023%20%5C%5C(Score%20-%2075)%20%5Ctimes%200.01%20%2B%20%5Cfrac%7B1%20%2B%20%5Cmax(0.05%20%5Ctimes%20(Eps%20-%2024)%2C%200)%7D%7B100%7D%20%26%20%5Ctext%7B%20if%20%7D%20Eps%20%5Cgeq%2024%5C%5C%5Ctext%7Botherwise%20%7D0%0A" alt="(Score - 75) \times 0.01 &amp; \text{ if } 12 &lt; Eps &lt; 23 \\(Score - 75) \times 0.01 + \frac{1 + \max(0.05 \times (Eps - 24), 0)}{100} &amp; \text{ if } Eps \geq 24\\\text{otherwise }0
 " />
 
-<img src="https://i.upmath.me/svg/aplScore%20%5Ctimes%20%5Cleft(1%20%2B%20(B%20%5Ctimes%20bWeight%20%2B%20P%20%5Ctimes%20pWeight)%5Cright)" alt="aplScore \times \left(1 + (B \times bWeight + P \times pWeight)\right)" />
+<img src="https://i.upmath.me/svg/Score%20%5Ctimes%20%5Cleft(1%20%2B%20(B%20%5Ctimes%20bWeight%20%2B%20P%20%5Ctimes%20pWeight)%5Cright)" alt="Score \times \left(1 + (B \times bWeight + P \times pWeight)\right)" />
 
 
 ***
