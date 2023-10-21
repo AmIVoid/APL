@@ -1,6 +1,6 @@
 import requests
-import os
 import json
+import time
 from ratelimit import limits, sleep_and_retry
 
 RATE_LIMIT = 60
@@ -33,12 +33,22 @@ def getRelationsData(listId):
 }
 	"""
 
-    variables = {"id": listId}
+    variables = {
+        'id': listId
+    }
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+    response = requests.post(
+        url, json={'query': query, 'variables': variables}, headers=headers)
 
-    response = requests.post(url, json={"query": query, "variables": variables})
+    if response.status_code == 429:
+        # retry after 5 seconds
+        time.sleep(5)
+        return getRelationsData(listId)
 
-    if response.status_code != 200:
-        raise Exception("API response: {}".format(response.status_code))
+    response.raise_for_status()
 
     return json.loads(response.text)
 
@@ -73,7 +83,8 @@ def planningSearch(search):
     variables = {"username": search, "type": "ANIME", "status": "PLANNING"}
     url = "https://graphql.anilist.co"
 
-    response = requests.post(url, json={"query": query, "variables": variables})
+    response = requests.post(
+        url, json={"query": query, "variables": variables})
     parsed_response = parseFunc(response.text)
 
     return parsed_response
@@ -103,11 +114,13 @@ def completedSearch(completed_search):
 }
 	"""
 
-    variables = {"username": completed_search, "type": "ANIME", "status": "COMPLETED"}
+    variables = {"username": completed_search,
+                 "type": "ANIME", "status": "COMPLETED"}
 
     url = "https://graphql.anilist.co"
 
-    response = requests.post(url, json={"query": query, "variables": variables})
+    response = requests.post(
+        url, json={"query": query, "variables": variables})
     parsed_response = parseFunc(response.text)
 
     return parsed_response
@@ -120,8 +133,11 @@ def parseFunc(data):
     for element in parsed:
         del element["status"]
 
-    parse_format = [x for x in parsed if x["media"]["format"] == "TV"]
+    allowed_formats = ["TV", "TV_SHORT"]
+    parse_format = [x for x in parsed if x["media"]
+                    ["format"] in allowed_formats]
 
-    parse_status = [x for x in parse_format if x["media"]["status"] == "FINISHED"]
+    parse_status = [x for x in parse_format if x["media"]
+                    ["status"] == "FINISHED"]
 
     return parse_status

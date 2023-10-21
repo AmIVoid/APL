@@ -1,29 +1,41 @@
-from pygsheetsorm import Repository, Model
-import json
+import csv
+from io import StringIO
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
-service_account_file = "credentials.json"
+scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets',
+         "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
 
-def updateSheets(sheetsId, sheetName, p_factor_data):
+creds = ServiceAccountCredentials.from_json_keyfile_name(
+    'credentials.json', scope)
+client = gspread.authorize(creds)
 
-    repo = Repository.get_repository_with_creds(
-        service_account_file=service_account_file,
-        spreadsheet_id=sheetsId,
-        sheet_name=sheetName,
-    )
 
-    list = repo.get_all()
+def updateSheets(p_factor_data, sheetId):
+    sorted_p_factor_data = sorted(
+        p_factor_data, key=lambda x: x['APL'], reverse=True)
 
-    for i in range(len(p_factor_data)):
+    for row_num, i in enumerate(sorted_p_factor_data):
+        del i['format']
+        del i['status']
+        i['Anime'] = '=HYPERLINK("https://anilist.co/anime/"&I' + \
+            str(row_num+2)+', J'+str(row_num+2)+')'
+        i['Watch Time'] = '=IF(C'+str(row_num+2) + \
+            '=0,"",(C'+str(row_num+2)+'*D'+str(row_num+2)+'/60))'
 
-        animeName = list[i]
+    output = StringIO()
+    csv_writer = csv.writer(output, quoting=csv.QUOTE_MINIMAL)
 
-        animeName.alt_name = p_factor_data[i]["title"]["romaji"]
-        animeName.apl_score = p_factor_data[i]["APL"]
-        animeName.episodes = p_factor_data[i]["episodes"]
-        animeName.episode_time = p_factor_data[i]["duration"]
-        animeName.mean_score = p_factor_data[i]["averageScore"]
-        animeName.anilist_id = p_factor_data[i]["id"]
-        animeName.b_factor = p_factor_data[i]["bfactor"]
-        animeName.p_factor = p_factor_data[i]["pfactor"]
+    count = 0
+    for i in sorted_p_factor_data:
+        i['title'] = i['title']['romaji']
+        if count == 0:
+            header = ['Anime', 'APL', 'episodes', 'duration', 'Watch Time',
+                      'averageScore', 'pfactor', 'bfactor', 'id', 'title']
+            csv_writer.writerow(header)
+            count += 1
+        csv_writer.writerow([str(i[column]) if column not in [
+            'Anime', 'Watch Time'] else i[column] for column in header])
 
-        animeName.Save()
+    content = output.getvalue()
+    client.import_csv(sheetId, data=content.encode('utf-8'))
